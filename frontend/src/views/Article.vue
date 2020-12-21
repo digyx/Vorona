@@ -1,5 +1,5 @@
 <template>
-  <div id="article">
+  <div id="article" v-show="this.show">
     <h1>{{ this.title }}</h1>
     <h2>{{ this.subtitle }}</h2>
     <hr>
@@ -28,10 +28,11 @@ export default Vue.extend({
 
   data: function() {
     return {
+      show: false,
       title: this.$route.params.title,
-      subtitle: "|",
+      subtitle: "Placeholder",
       sidebar: {Hello: "World"},
-      body: "",
+      body: "Placeholder",
     }
   },
 
@@ -55,6 +56,7 @@ export default Vue.extend({
         this.subtitle = res.data.Subtitle
         this.sidebar = res.data.Sidebar
         this.body = res.data.Body
+        this.show = true
       })
       .catch((err)=> alert(err))
     }
