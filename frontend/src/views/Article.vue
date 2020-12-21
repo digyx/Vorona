@@ -1,34 +1,83 @@
 <template>
   <div id="article">
-    {{ this.body }}
+    <h1>{{ this.title }}</h1>
+    <h2>{{ this.subtitle }}</h2>
+    <hr>
+    <div id="container">
+      <div v-html="body" id="content"></div>
+      <div id="sidebar">
+        <div v-for="(value, key) in this.sidebar" :key="key.id">
+          <p>
+            <b>{{ key }}</b>
+            <br>
+            {{ value }}
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import Vue from 'vue'
 import axios from 'axios';
-import marked from 'marked'
-// import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import { nextTick } from 'vue/types/umd';
 
-export default defineComponent({
+export default Vue.extend({
   name: 'Article',
 
   data: function() {
     return {
-      subtitle: String,
-      sidebar: Object,
-      body: String,
+      title: this.$route.params.title,
+      subtitle: "|",
+      sidebar: {Hello: "World"},
+      body: "",
     }
   },
 
   created() {
-    axios.get(`https://localhost:8000/article/${this.$route.params.title}`)
+    this.getPage()
+  },
+
+  beforeRouteUpdate(to, from, next) {
+    this.title = to.params["title"]
+    this.getPage()
+
+    return next()
+  },
+
+  methods: {
+    getPage() {
+      axios.get(`${this.$store.getters.getURL}:8000/articles/${this.title}`)
     .then((res) => {
       this.subtitle = res.data.Subtitle
-      this.sidebar = res.data.Didebar
-      this.body = marked(res.data.Body)
+      this.sidebar = res.data.Sidebar
+      this.body = res.data.Body
     })
     .catch((err)=> alert(err))
+    }
   }
 });
 </script>
+
+<style scoped>
+#article {
+  margin: 1em 1em 1em 19em;
+  text-align: justify;
+}
+
+#container {
+  display: flex;
+}
+
+#content {
+  margin: 1em 5em 1em 2em;
+}
+
+#sidebar {
+  width: 15em;
+  margin: 2em;
+  padding: 3em;
+  flex-shrink: 0;
+}
+</style>

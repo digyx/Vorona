@@ -1,4 +1,4 @@
-# frontend
+# vorona
 
 ## Project setup
 ```

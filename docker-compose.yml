@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  frontend:
+    image: frontend
+    build: ./frontend
+    volumes:
+      - "./frontend:/usr/src/frontend"
+    ports:
+      - 5000:8080
+
+  api:
+    image: api
+    build: ./backend
+    environment: 
+      - MONGO_URI=host.docker.internal
+    ports:
+      - 8000:8080
+
+  mongo:
+    image: mongo
+    command: mongod --bind_ip 0.0.0.0
+    ports:
+      - 27017:27017
