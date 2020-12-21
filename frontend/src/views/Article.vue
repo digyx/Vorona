@@ -48,13 +48,15 @@ export default Vue.extend({
 
   methods: {
     getPage() {
+      document.title = `Gnezdo Vorona - ${this.title}`
+
       axios.get(`${this.$store.getters.getURL}:8000/articles/${this.title}`)
-    .then((res) => {
-      this.subtitle = res.data.Subtitle
-      this.sidebar = res.data.Sidebar
-      this.body = res.data.Body
-    })
-    .catch((err)=> alert(err))
+      .then((res) => {
+        this.subtitle = res.data.Subtitle
+        this.sidebar = res.data.Sidebar
+        this.body = res.data.Body
+      })
+      .catch((err)=> alert(err))
     }
   }
 });

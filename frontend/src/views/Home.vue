@@ -11,6 +11,9 @@ import Vue from 'vue';
 
 export default Vue.extend({
   name: 'Home',
+  created() {
+    document.title = "Gnezdo Vorona"
+  }
 });
 </script>
 
