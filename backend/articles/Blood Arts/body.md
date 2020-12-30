@@ -3,7 +3,8 @@ Blood Arts are the magic incantations used by Vampires and those who pledged the
 **D&D Note:**  Each blood art costs one action to cast.  Each pint of blood corresponds to 1/5 of a character's health or 35 HP, whichever is less.  The flavour text is just an exmaple, each Blood Art can be cast by releasing blood from anywhere on the body, not necessarily in the specific location mentioned in the text.
 
 # The Seven Blood Arts
-<div style="display: flex">
+---
+<div style="display: flex" class="flex-content">
 <div style="margin: 1em">
 
 ## 1. Blood Storm

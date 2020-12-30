@@ -96,6 +96,10 @@ p {
     align-items: center;
   }
 
+  #flex-content {
+    flex-direction: column;
+  }
+
   #sidebar {
     width: calc(100% - 2em);
     max-width: calc(320px + 2em);
