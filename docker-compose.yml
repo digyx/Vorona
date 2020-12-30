@@ -1,14 +1,6 @@
 version: "3"
 
 services:
-  frontend:
-    image: nginx
-    volumes:
-      - "frontend/dist:/var/www/vorona.gg/html"
-      - "/etc/letsencrypt"
-    ports:
-      - 443:443
-
   api:
     image: api
     build: ./backend
