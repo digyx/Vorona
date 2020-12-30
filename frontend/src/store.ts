@@ -20,12 +20,8 @@ export default new Vuex.Store({
           state.url = "https://vorona.gg"
           break
 
-        case "dev.vorona.gg":
-          state.url = "https://dev.vorona.gg"
-          break
-
         default:
-          state.url = "http://localhost"
+          state.url = "https://localhost"
           break
       }
 

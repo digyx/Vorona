@@ -1,11 +1,12 @@
 <template>
-  <div id="article" v-show="this.show">
+  <div id="article" v-show="this.show" class="content">
     <h1>{{ this.title }}</h1>
     <h2>{{ this.subtitle }}</h2>
     <hr>
     <div id="container">
       <div v-html="body" id="content"></div>
       <div id="sidebar">
+        <img :src="'https://cdn.vorona.gg/'+ this.title + '.png'" id="headshot">
         <div v-for="(value, key) in this.sidebar" :key="key.id">
           <p>
             <b>{{ key }}</b>
@@ -21,7 +22,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import axios from 'axios';
-import { nextTick } from 'vue/types/umd';
 
 export default Vue.extend({
   name: 'Article',
@@ -49,6 +49,7 @@ export default Vue.extend({
 
   methods: {
     getPage() {
+      window.dispatchEvent(new Event("locationchange"))
       document.title = `Gnezdo Vorona - ${this.title}`
 
       axios.get(`${this.$store.getters.getURL}:8000/articles/${this.title}`)
@@ -64,9 +65,8 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
-#article {
-  margin: 1em 1em 1em 19em;
+<style>
+p {
   text-align: justify;
 }
 
@@ -79,9 +79,38 @@ export default Vue.extend({
 }
 
 #sidebar {
-  width: 15em;
+  width: 320px;
+  height: 100%;
   margin: 2em;
-  padding: 3em;
+  padding: 1em;
   flex-shrink: 0;
+  
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 0.5em;
+}
+
+@media screen and (max-width: 1040px){
+  #container {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+
+  #sidebar {
+    width: calc(100% - 2em);
+    max-width: calc(320px + 2em);
+    margin: 1em;
+    padding: 1em;
+  }
+
+  #headshot {
+    max-width: 320px;
+    width: 100%;
+    height: auto;
+  }
+
+  #content {
+    margin: 1em;
+  }
 }
 </style>

@@ -2,18 +2,20 @@ version: "3"
 
 services:
   frontend:
-    image: frontend
-    build: ./frontend
+    image: nginx
     volumes:
-      - "./frontend:/usr/src/frontend"
+      - "frontend/dist:/var/www/vorona.gg/html"
+      - "/etc/letsencrypt"
     ports:
-      - 5000:8080
+      - 443:443
 
   api:
     image: api
     build: ./backend
     environment: 
       - MONGO_URI=host.docker.internal
+    volumes:
+      - "/etc/letsencrypt"
     ports:
       - 8000:8080
 

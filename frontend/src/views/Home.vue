@@ -1,5 +1,5 @@
 <template>
-  <div id="home">
+  <div id="home" class="content">
     <h1>The World of Gnezdo Vorona</h1>
     <hr>
     Please use the navigation bar to the left to view articles.
@@ -16,10 +16,3 @@ export default Vue.extend({
   }
 });
 </script>
-
-<style scoped>
-#home {
-  margin: 1em 1em 1em 19em;
-  text-align: justify;
-}
-</style>

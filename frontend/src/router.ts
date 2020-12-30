@@ -9,12 +9,20 @@ const routes: Array<RouteConfig> = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    beforeEnter(to, from, next) {
+      window.dispatchEvent(new Event("locationchange"))
+      next()
+    }
   },
   {
     path: '/articles/:title',
     name: 'articles',
-    component: Article
+    component: Article,
+    beforeEnter(to, from, next) {
+      window.dispatchEvent(new Event("locationchange"))
+      next()
+    }
   }
 ]
 
