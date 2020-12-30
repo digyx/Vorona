@@ -17,7 +17,7 @@ export default new Vuex.Store({
     getURL: (state) => {
       switch (window.location.hostname) {
         case "vorona.gg":
-          state.url = "https://vorona.gg"
+          state.url = "https://api.vorona.gg"
           break
 
         default:
