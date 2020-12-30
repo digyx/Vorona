@@ -2,7 +2,6 @@
   <div id="article" v-show="this.show" class="content">
     <h1>{{ this.title }}</h1>
     <h2>{{ this.subtitle }}</h2>
-    <hr>
     <div id="container">
       <div v-html="body" id="content"></div>
       <div id="sidebar">
@@ -96,7 +95,7 @@ p {
     align-items: center;
   }
 
-  #flex-content {
+  .flex-content {
     flex-direction: column;
   }
 
