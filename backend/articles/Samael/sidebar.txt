@@ -1,0 +1,6 @@
+Gender:Female
+Eyes:Red
+Hair:Black, Shoulder Length
+Skin:Bronze Tan
+Height:5'6"
+Domain:Nature
