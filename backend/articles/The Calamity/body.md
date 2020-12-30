@@ -1,3 +1,10 @@
+# Results
+* Rise of the True Demon Lords
+* Beginning of Reincarnation
+* Turn of a new era
+* Purging of Heaven, Hell, and the Abyss
+* Destruction of all but eight major settlements
+
 # The Buildup
 Three years before the Calamity, the Archangel Michael waged war against the Demonic Overlord, the Raven Queen. Before the war were small scale duels between the two and their allies which had very little impact on the world surrounding them. These duels served more as a show fo force than actual battle, yet this trend didn't continue for long. The war itself was started with the slaughter of Nyssa's allies and closest friends. Sparking off the war, the then Demon Lord Mephisto ventured to the ends of the realm in search of her beloved while the Raven Queen invaded Heaven with the Demon Lord Beelzebub to rescue the Archangel Ciel, the sole Archangel who wished for peace between demons, devils, and angels. In reaction, Michael ressurected the once dead Angelic Overlord, the Almighty Adam Kadmon. 
 
