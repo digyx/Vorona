@@ -5,7 +5,7 @@
     <div id="container">
       <div v-html="body" id="content"></div>
       <div id="sidebar">
-        <img :src="'https://cdn.vorona.gg/'+ this.title + '.png'" id="headshot">
+        <img :src="'https://cdn.vorona.gg/'+ this.title + '.jpg'" id="headshot" onerror="this.style.display='none'">
         <div v-for="(value, key) in this.sidebar" :key="key.id">
           <p>
             <b>{{ key }}</b>
