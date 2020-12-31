@@ -89,6 +89,10 @@ p {
   border-radius: 0.5em;
 }
 
+#headshot {
+  max-width: 320px;
+}
+
 @media screen and (max-width: 1040px){
   #container {
     flex-direction: column-reverse;
