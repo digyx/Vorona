@@ -21,8 +21,8 @@ jobs:
         shell: bash
         env:
           SSH_PRIVATE_KEY: ${{secrets.VORONA_PRIAVATE_SSH_KEY}}
-        SSH_KNOWN_HOSTS: ${{secrets.VORONA_KNOWN_HOSTS}}
-        SSH_KEY_PATH: ${{ github.workspace }}/../private.key
+          SSH_KNOWN_HOSTS: ${{secrets.VORONA_KNOWN_HOSTS}}
+          SSH_KEY_PATH: ${{ github.workspace }}/../private.key
         
       - name: Reload Backend
         run: ssh -i $SSH_KEY_PATH root@api.vorona.gg (cd Vorona && python3 manage.py server)
