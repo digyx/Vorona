@@ -20,7 +20,7 @@ jobs:
           echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
         shell: bash
         env:
-          SSH_PRIVATE_KEY: ${{secrets.VORONA_PRIAVATE_SSH_KEY}}
+          SSH_PRIVATE_KEY: ${{secrets.VORONA_PRIVATE_SSH_KEY}}
           SSH_KNOWN_HOSTS: ${{secrets.VORONA_KNOWN_HOSTS}}
         
       - name: Reload Backend
