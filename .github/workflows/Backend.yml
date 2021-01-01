@@ -1,0 +1,28 @@
+name: Reload Backend
+
+  on:
+    push:
+      branches:
+        - production
+
+    workflow_dispatch:
+
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Copy SSH Key
+          run: | 
+            mkdir -p ~/.ssh/
+            echo "$SSH_PRIVATE_KEY" > ~/.ssh/private.key
+            sudo chmod 600 ../private.key
+            echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          shell: bash
+          env:
+            SSH_PRIVATE_KEY: ${{secrets.VORONA_PRIAVATE_SSH_KEY}}
+          SSH_KNOWN_HOSTS: ${{secrets.VORONA_KNOWN_HOSTS}}
+          SSH_KEY_PATH: ${{ github.workspace }}/../private.key
+          
+        - name: Reload Backend
+          run: ssh -i $SSH_KEY_PATH root@api.vorona.gg (cd Vorona && python3 manage.py server)
