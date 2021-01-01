@@ -15,8 +15,8 @@ jobs:
       - name: Copy SSH Key
         run: | 
           mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" > ../private.key
-          sudo chmod 600 ../private.key
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/private.key
+          sudo chmod 600 ~/.ssh/private.key
           echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
         shell: bash
         env:
@@ -26,4 +26,4 @@ jobs:
       - name: Reload Backend
         run: ssh -i $SSH_KEY_PATH root@api.vorona.gg "cd Vorona && python3 manage.py server"
         env:
-          SSH_KEY_PATH: ${{ github.workspace }}/../private.key
+          SSH_KEY_PATH: ~/.ssh/private.key
