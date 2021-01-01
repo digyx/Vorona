@@ -16,7 +16,7 @@ services:
       - MONGO_URI=host.docker.internal
       - DEV_ENV=true
     volumes:
-      - "/etc/letsencrypt"
+      - "/etc/letsencrypt:/etc/letsencrypt"
     ports:
       - 8000:8080
 
