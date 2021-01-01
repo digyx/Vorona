@@ -42,8 +42,16 @@ func startServer(r *mux.Router) {
 
 	// Start the server in a new thread
 	go func() {
-		cert := "/etc/letsencrypt/live/api.vorona.gg/cert.pem"
+		if os.Getenv("DEV_ENV") == "true" { // Development server uses HTTP
+			err := server.ListenAndServe()
+
+			if err != nil && err != http.ErrServerClosed {
+				log.Fatal(err)
+			}
+		}
+
 		key := "/etc/letsencrypt/live/api.vorona.gg/privkey.pem"
+		cert := "/etc/letsencrypt/live/api.vorona.gg/cert.pem"
 		err := server.ListenAndServeTLS(cert, key)
 
 		if err != nil && err != http.ErrServerClosed {

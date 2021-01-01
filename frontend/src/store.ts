@@ -21,7 +21,7 @@ export default new Vuex.Store({
           break
 
         default:
-          state.url = "https://localhost"
+          state.url = "http://localhost"
           break
       }
 

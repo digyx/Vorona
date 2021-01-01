@@ -1,20 +1,11 @@
 version: "3"
 
 services:
-  frontend:
-    image: frontend
-    build: ./frontend
-    volumes:
-      - "./frontend:/usr/src/frontend"
-    ports:
-      - 5000:8080
-      
   api:
     image: api
     build: ./backend
     environment: 
-      - MONGO_URI=host.docker.internal
-      - DEV_ENV=true
+      - MONGO_URI=172.17.0.1
     volumes:
       - "/etc/letsencrypt"
     ports:
