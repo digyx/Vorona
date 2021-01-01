@@ -81,7 +81,7 @@ if __name__ == "__main__":
         subprocess.run("git pull", shell=True)
         subprocess.run("docker-compose -f docker-compose-server.yml build", shell=True)
         subprocess.run("docker-compose -f docker-compose-server.yml up -d", shell=True)
-    
+
     elif sys.argv[1] == "list":
         print("python manage.py <command>")
         print()
