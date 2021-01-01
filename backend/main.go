@@ -48,6 +48,8 @@ func startServer(r *mux.Router) {
 			if err != nil && err != http.ErrServerClosed {
 				log.Fatal(err)
 			}
+
+			return
 		}
 
 		key := "/etc/letsencrypt/live/api.vorona.gg/privkey.pem"

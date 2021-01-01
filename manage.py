@@ -77,10 +77,10 @@ if __name__ == "__main__":
         check_vue()
     
     elif sys.argv[1] == "server":
-        subprocess.run("docker-compose -f docker-compose-server.yml down api mongo", shell=True)
+        subprocess.run("docker-compose -f docker-compose-server.yml down", shell=True)
         subprocess.run("git pull", shell=True)
-        subprocess.run("docker-compose -f docker-compose-server.yml build api mongo", shell=True)
-        subprocess.run("docker-compose -f docker-compose-server.yml up -d api mongo", shell=True)
+        subprocess.run("docker-compose -f docker-compose-server.yml build", shell=True)
+        subprocess.run("docker-compose -f docker-compose-server.yml up -d", shell=True)
     
     elif sys.argv[1] == "list":
         print("python manage.py <command>")
