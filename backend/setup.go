@@ -7,7 +7,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/gomarkdown/markdown"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -55,7 +54,7 @@ func setupDatabase() {
 			Title:    title,
 			Subtitle: string(subtitle),
 			Sidebar:  sidebar,
-			Body:     string(markdown.ToHTML(body, nil, nil)),
+			Body:     string(body),
 		}
 
 		client.Collection("articles").InsertOne(ctx, toAdd)

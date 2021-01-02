@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gomarkdown/markdown"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -53,6 +54,9 @@ func getArticle(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(404)
 		return
 	}
+
+	htmlBody := markdown.ToHTML([]byte(article.Body), nil, nil)
+	article.Body = string(htmlBody)
 
 	json.NewEncoder(w).Encode(article)
 }
