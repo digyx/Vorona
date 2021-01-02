@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -31,6 +32,15 @@ func connectToDatabase() {
 func setupDatabase() {
 	fmt.Println("Populating database...")
 
+	// Check if the database is already populated (sson to be retired)
+	var article Article
+	client.Collection("articles").FindOne(ctx, bson.D{}).Decode(&article)
+
+	if article.Body != "" {
+		return
+	}
+
+	//  Add articles to the database
 	files, err := ioutil.ReadDir("./articles")
 
 	if err != nil {

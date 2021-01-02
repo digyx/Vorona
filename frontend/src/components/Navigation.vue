@@ -15,6 +15,15 @@
             {{ article }}
           </router-link>
         </div>
+
+        <div id="nav-account">
+          <h2 v-if="!this.$store.getters.isLoggedIn" @click="$router.push('/login')">
+            Login
+          </h2>
+          <h2 v-if="this.$store.getters.isLoggedIn" @click="$router.push('/account')">
+            Account
+          </h2>
+        </div>
       </div>
     </div>
 </template>
@@ -41,12 +50,14 @@ export default Vue.extend({
 
     window.addEventListener("resize", this.checkResize)
     window.addEventListener("locationchange", this.checkResize)
+    this.checkResize()
   },
 
   methods: {
     home() {
       this.$router.push("/")
     },
+
     checkResize() {
       if (window.innerWidth < 1380) {
         this.mobile = true
@@ -56,9 +67,11 @@ export default Vue.extend({
         this.showNav = true
       }
     },
+
     displayNavbar() {
       this.showNav = true
     },
+
     hideNavbar() {
       this.showNav = false
     }
@@ -76,6 +89,14 @@ export default Vue.extend({
 
 .nav-item {
   margin: 1em;
+}
+
+#nav-account {
+  position: fixed;
+  bottom: 1em;
+  left: 3em;
+
+  cursor: pointer;
 }
 
 @media screen and (max-width: 1380px) {

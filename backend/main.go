@@ -31,6 +31,8 @@ func main() {
 	// Handle Endpoints
 	r.HandleFunc("/articles/{title}", getArticle).Methods("GET", "OPTIONS")
 	r.HandleFunc("/articles", getArticleList).Methods("GET", "OPTIONS")
+	r.HandleFunc("/login", login).Methods("POST", "OPTIONS")
+	r.HandleFunc("/signup", createAccount).Methods("POST", "OPTIONS")
 	r.HandleFunc("/healthcheck", healthcheck)
 
 	startServer(r)

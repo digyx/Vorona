@@ -7,3 +7,9 @@ type Article struct {
 	Sidebar  map[string]string
 	Body     string
 }
+
+// User - Database Schema
+type User struct {
+	Email    string
+	Password string
+}

@@ -5,9 +5,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    url: ""
+    url: "",
+    isLoggedIn: false
   },
   mutations: {
+    login(state) {
+      state.isLoggedIn = true
+    },
+    logout(state) {
+      state.isLoggedIn = false
+    }
   },
   actions: {
   },
@@ -27,5 +34,9 @@ export default new Vuex.Store({
 
       return state.url
     },
+
+    isLoggedIn: (state) => {
+      return state.isLoggedIn
+    }
   }
 })
