@@ -41,7 +41,7 @@ export default Vue.extend({
 
   methods: {
     login() {
-      const url = `${this.$store.getters.getURL}:8000/login`
+      const url = `${this.$store.getters.getURL}:8000/auth`
       const data = {
         Email: this.email,
         Password: this.password
@@ -70,14 +70,16 @@ export default Vue.extend({
         return
       }
 
-      const url = `${this.$store.getters.getURL}:8000/signup`
+      const url = `${this.$store.getters.getURL}:8000/auth`
       const data = {
         Email: this.email,
         Password: this.password
       }
 
-      axios.post(url, data)
-      .then(() => this.$router.push("/account"))
+      axios.put(url, data)
+      .then(() => {
+        this.$store.commit('login')
+      })
       .catch((err) => alert(err))
     },
 

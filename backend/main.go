@@ -23,7 +23,6 @@ func main() {
 	fmt.Println("Starting server...")
 
 	connectToDatabase()
-	setupDatabase()
 
 	// Initialize router
 	r := mux.NewRouter()
@@ -31,8 +30,12 @@ func main() {
 	// Handle Endpoints
 	r.HandleFunc("/articles/{title}", getArticle).Methods("GET", "OPTIONS")
 	r.HandleFunc("/articles", getArticleList).Methods("GET", "OPTIONS")
-	r.HandleFunc("/login", login).Methods("POST", "OPTIONS")
-	r.HandleFunc("/signup", createAccount).Methods("POST", "OPTIONS")
+
+	r.HandleFunc("/auth", isLoggedIn).Methods("GET", "OPTIONS")
+	r.HandleFunc("/auth", login).Methods("POST", "OPTIONS")
+	r.HandleFunc("/auth", logout).Methods("DELETE", "OPTIONS")
+	r.HandleFunc("/auth", createAccount).Methods("PUT", "OPTIONS")
+
 	r.HandleFunc("/healthcheck", healthcheck)
 
 	startServer(r)
@@ -82,11 +85,12 @@ func startServer(r *mux.Router) {
 
 func setupResponse(w *http.ResponseWriter, r *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
-	(*w).Header().Set("Access-Control.Allow-Methods", "POST")
+	(*w).Header().Set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE")
 	(*w).Header().Set("Content-Type", "application/json")
 	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	(*w).Header().Set("Access-Control-Allow-Credentials", "true")
 }
 
 func healthcheck(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(200)
+	w.WriteHeader(http.StatusOK)
 }

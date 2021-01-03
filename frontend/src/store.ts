@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
+import router from './router'
 
 Vue.use(Vuex)
 
@@ -11,9 +13,14 @@ export default new Vuex.Store({
   mutations: {
     login(state) {
       state.isLoggedIn = true
+      router.push("/account")
     },
     logout(state) {
-      state.isLoggedIn = false
+      axios.delete(`${state.url}:8000/auth`)
+      .then(() => {
+        state.isLoggedIn = false
+        router.push("/")
+      })
     }
   },
   actions: {
@@ -36,7 +43,16 @@ export default new Vuex.Store({
     },
 
     isLoggedIn: (state) => {
-      return state.isLoggedIn
+      if (state.isLoggedIn) {
+        return true
+      }
+
+      axios.get(`${state.url}:8000/auth`)
+      .then(() => {
+        state.isLoggedIn = true
+        return true
+      })
+      .catch(() => {return state.isLoggedIn})
     }
   }
 })

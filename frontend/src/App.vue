@@ -14,6 +14,9 @@ export default Vue.extend({
   name: "App",
   components: {
     Navbar,
+  },
+  created() {
+    this.$store.getters.getURL()
   }
 })
 </script>
@@ -33,6 +36,7 @@ export default Vue.extend({
 #nav {
   height: 100%;
   position: fixed;
+  z-index: 2;
   top: 0;
   left: 0;
 }

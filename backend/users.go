@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gorilla/sessions"
 	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/crypto/bcrypt"
 )
+
+var store = sessions.NewCookieStore([]byte("Hello World"))
 
 func login(w http.ResponseWriter, r *http.Request) {
 	setupResponse(&w, r)
@@ -27,11 +30,27 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil || user.Email == "" {
 		fmt.Println(err)
-		w.WriteHeader(401)
+		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
-	w.WriteHeader(200)
+	setupSession(w, r)
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func logout(w http.ResponseWriter, r *http.Request) {
+	setupResponse(&w, r)
+
+	if r.Method == "OPTIONS" {
+		return
+	}
+
+	session, _ := store.Get(r, "session")
+	session.Values["authenticated"] = false
+	session.Save(r, w)
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func createAccount(w http.ResponseWriter, r *http.Request) {
@@ -50,7 +69,7 @@ func createAccount(w http.ResponseWriter, r *http.Request) {
 	client.Collection("users").FindOne(ctx, filter).Decode(&checkUser)
 
 	if checkUser.Email != "" {
-		w.WriteHeader(409)
+		w.WriteHeader(http.StatusConflict)
 		return
 	}
 
@@ -58,7 +77,7 @@ func createAccount(w http.ResponseWriter, r *http.Request) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
 
 	if err != nil {
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -68,9 +87,40 @@ func createAccount(w http.ResponseWriter, r *http.Request) {
 	_, err = client.Collection("users").InsertOne(ctx, user)
 
 	if err != nil {
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	w.WriteHeader(200)
+	setupSession(w, r)
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func setupSession(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "session")
+
+	session.Values["authenticated"] = true
+	session.Save(r, w)
+}
+
+func isLoggedIn(w http.ResponseWriter, r *http.Request) {
+	setupResponse(&w, r)
+
+	if r.Method == "OPTIONS" {
+		return
+	}
+
+	session, _ := store.Get(r, "session")
+
+	if session.Values["authenticated"] == nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	if session.Values["authenticated"].(bool) == false {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

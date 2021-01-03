@@ -30,7 +30,6 @@ export default Vue.extend({
   methods: {
       logout() {
           this.$store.commit('logout')
-          this.$router.push("/")
       }
   }
 });

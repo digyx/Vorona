@@ -27,11 +27,8 @@ const routes: Array<RouteConfig> = [
     name: 'login',
     component: Login,
     beforeEnter(to, from, next) {      
-      if (store.getters.isLoggedIn) {
-        next("/account")
-      }
-
-      next()
+      if (store.getters.isLoggedIn) next("/account")
+      else next()
     },
   },
   {
@@ -39,11 +36,8 @@ const routes: Array<RouteConfig> = [
     name: 'account',
     component: Account,
     beforeEnter(to, from, next) {
-      if (!store.getters.isLoggedIn) {
-        next("/login")
-      }
-
-      next()
+      if (!store.getters.isLoggedIn) next("/login")
+      else next()
     }
   }
 ]
@@ -60,3 +54,13 @@ router.beforeEach((to, from, next) => {
 })
 
 export default router
+
+
+/* 
+  TODO:
+    - Have isLoggedIn getter check if there is an active session if isLoggedIn is false
+    - Differentiate between when to send Markdwon vs HTML articles
+    - Add editor so we can edit via the web
+    - Maybe add some tests for edge cases and shit
+    - Oh, yeah, investigate edge cases
+*/
