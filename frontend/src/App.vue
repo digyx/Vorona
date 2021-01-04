@@ -14,9 +14,6 @@ export default Vue.extend({
   name: "App",
   components: {
     Navbar,
-  },
-  created() {
-    this.$store.getters.getURL()
   }
 })
 </script>

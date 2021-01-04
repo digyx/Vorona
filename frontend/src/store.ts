@@ -15,6 +15,7 @@ export default new Vuex.Store({
       state.isLoggedIn = true
       router.push("/account")
     },
+
     logout(state) {
       axios.delete(`${state.url}:8000/auth`)
       .then(() => {
@@ -23,10 +24,7 @@ export default new Vuex.Store({
       })
     }
   },
-  actions: {
-  },
-  modules: {
-  },
+
   getters: {
     getURL: (state) => {
       switch (window.location.hostname) {
@@ -48,11 +46,11 @@ export default new Vuex.Store({
       }
 
       axios.get(`${state.url}:8000/auth`)
-      .then(() => {
-        state.isLoggedIn = true
-        return true
-      })
-      .catch(() => {return state.isLoggedIn})
+      .then(() => {state.isLoggedIn = true})
+
+      return axios.get(`${state.url}:8000/auth`)
+      .then(() => {return true})
+      .catch(() => {return false})
     }
   }
 })
