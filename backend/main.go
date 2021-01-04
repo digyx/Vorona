@@ -30,6 +30,7 @@ func main() {
 	// Handle Endpoints
 	r.HandleFunc("/articles/{title}", getArticle).Methods("GET", "OPTIONS")
 	r.HandleFunc("/articles", getArticleList).Methods("GET", "OPTIONS")
+	r.HandleFunc("/articles/{id}", updateArticle).Methods("POST", "OPTIONS")
 
 	r.HandleFunc("/auth", isLoggedIn).Methods("GET", "OPTIONS")
 	r.HandleFunc("/auth", login).Methods("POST", "OPTIONS")

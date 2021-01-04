@@ -5,6 +5,7 @@ import store from './store'
 
 import Home from '@/views/Home.vue'
 import Article from '@/views/Article.vue'
+import Editor from '@/views/Editor.vue'
 import Login from '@/views/Login.vue'
 import Account from '@/views/Account.vue'
 
@@ -21,6 +22,11 @@ const routes: Array<RouteConfig> = [
     path: '/articles/:title',
     name: 'articles',
     component: Article
+  },
+  {
+    path: '/editor',
+    name: 'editor',
+    component: Editor
   },
   {
     path: '/login',

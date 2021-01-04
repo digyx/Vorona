@@ -56,7 +56,7 @@ export default Vue.extend({
       window.dispatchEvent(new Event("locationchange"))
       document.title = `Gnezdo Vorona - ${this.title}`
 
-      axios.get(`${this.$store.getters.getURL}:8000/articles/${this.title}`)
+      axios.get(`${this.$store.getters.getURL}:8000/articles/${this.title}?format=html`)
       .then((res) => {
         this.subtitle = res.data.Subtitle
         this.sidebar = res.data.Sidebar

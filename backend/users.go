@@ -34,7 +34,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	setupSession(w, r)
+	setupSession(w, r, user.Email)
 
 	w.WriteHeader(http.StatusOK)
 }
@@ -91,15 +91,18 @@ func createAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	setupSession(w, r)
+	setupSession(w, r, user.Email)
 
 	w.WriteHeader(http.StatusOK)
 }
 
-func setupSession(w http.ResponseWriter, r *http.Request) {
+func setupSession(w http.ResponseWriter, r *http.Request,
+	email string) {
 	session, _ := store.Get(r, "session")
 
 	session.Values["authenticated"] = true
+	session.Values["email"] = email
+
 	session.Save(r, w)
 }
 
