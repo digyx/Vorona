@@ -9,11 +9,18 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import axios from 'axios'
 import Navbar from '@/components/Navigation.vue'
+
 export default Vue.extend({
   name: "App",
   components: {
     Navbar,
+  },
+  created() {
+    axios.get(`${this.$store.getters.getURL}:8000/auth`)
+    .then(() => this.$store.commit('authSuccess'))
+    .catch(() => this.$store.commit('authFail'))
   }
 })
 </script>

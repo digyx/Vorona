@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
+import axios from 'axios'
 
 import store from './store'
 
@@ -26,14 +27,19 @@ const routes: Array<RouteConfig> = [
   {
     path: '/editor',
     name: 'editor',
-    component: Editor
+    component: Editor,
+    beforeEnter(to, from, next) {
+      axios.get(`${store.getters.getURL}:8000/admin`)
+      .then(() => next())
+      .catch(() => next("/"))
+    }
   },
   {
     path: '/login',
     name: 'login',
     component: Login,
     beforeEnter(to, from, next) {
-      if (store.getters.isLoggedIn) next("/account")
+      if (store.state.isLoggedIn) next("/account")
       else next()
     },
   },
@@ -42,7 +48,7 @@ const routes: Array<RouteConfig> = [
     name: 'account',
     component: Account,
     beforeEnter(to, from, next) {
-      if (!store.getters.isLoggedIn) next("/login")
+      if (!store.state.isLoggedIn) next("/login")
       else next()
     }
   }
@@ -64,8 +70,6 @@ export default router
 
 /* 
   TODO:
-    - Differentiate between when to send Markdwon vs HTML articles
-    - Add editor so we can edit via the web
     - Maybe add some tests for edge cases and shit
     - Oh, yeah, investigate edge cases
 */

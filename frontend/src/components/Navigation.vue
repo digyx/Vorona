@@ -17,10 +17,10 @@
         </div>
 
         <div id="nav-account">
-          <h2 v-if="!this.$store.getters.isLoggedIn" @click="$router.push('/login')">
+          <h2 v-if="!this.$store.state.isLoggedIn" @click="$router.push('/login')">
             Login
           </h2>
-          <h2 v-if="this.$store.getters.isLoggedIn" @click="$router.push('/account')">
+          <h2 v-if="this.$store.state.isLoggedIn" @click="$router.push('/account')">
             Account
           </h2>
         </div>

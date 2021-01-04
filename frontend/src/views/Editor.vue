@@ -97,6 +97,11 @@ export default Vue.extend({
           case 500:
             alert("Error adding to database")
             break
+
+          case 401:
+            alert("You shouldn't be here...")
+            break
+            
           default:
             alert(err)
             break

@@ -127,3 +127,22 @@ func isLoggedIn(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 }
+
+func isAdmin(w http.ResponseWriter, r *http.Request) {
+	setupResponse(&w, r)
+
+	if r.Method == "OPTIONS" {
+		return
+	}
+
+	session, _ := store.Get(r, "session")
+	email := session.Values["email"].(string)
+	auth := session.Values["authenticated"].(bool)
+
+	if email != "dtingley@twilit.io" || !auth {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}

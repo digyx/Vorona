@@ -37,6 +37,8 @@ func main() {
 	r.HandleFunc("/auth", logout).Methods("DELETE", "OPTIONS")
 	r.HandleFunc("/auth", createAccount).Methods("PUT", "OPTIONS")
 
+	r.HandleFunc("/admin", isAdmin).Methods("GET", "OPTIONS")
+
 	r.HandleFunc("/healthcheck", healthcheck)
 
 	startServer(r)

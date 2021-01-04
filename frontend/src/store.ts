@@ -10,6 +10,7 @@ export default new Vuex.Store({
     url: "",
     isLoggedIn: false
   },
+  
   mutations: {
     login(state) {
       state.isLoggedIn = true
@@ -22,6 +23,14 @@ export default new Vuex.Store({
         state.isLoggedIn = false
         router.push("/")
       })
+    },
+
+    authSuccess(state) {
+      state.isLoggedIn = true
+    },
+    
+    authFail(state) {
+      state.isLoggedIn = false
     }
   },
 
@@ -38,19 +47,6 @@ export default new Vuex.Store({
       }
 
       return state.url
-    },
-
-    isLoggedIn: (state) => {
-      if (state.isLoggedIn) {
-        return true
-      }
-
-      axios.get(`${state.url}:8000/auth`)
-      .then(() => {state.isLoggedIn = true})
-
-      return axios.get(`${state.url}:8000/auth`)
-      .then(() => {return true})
-      .catch(() => {return false})
     }
   }
 })
