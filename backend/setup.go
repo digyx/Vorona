@@ -1,27 +1,24 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"os"
 
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/jackc/pgx"
 )
 
 func connectToDatabase() {
 	fmt.Println("Connecting to database...")
-	// Connect to MongoDB Database
-	ctx = context.Background()
-	mongoURI := fmt.Sprintf("mongodb://%s:27017", os.Getenv("MONGO_URI"))
-	remote, err := mongo.Connect(ctx, options.Client().ApplyURI(mongoURI))
+	// Connect to Postgres Database
+	config, _ := pgx.ParseConnectionString(os.Getenv("POSTGRES_URI"))
+	remote, err := pgx.Connect(config)
 
 	if err != nil {
-		fmt.Println(err)
-		panic("Could not connect to database.")
+		fmt.Printf("error: cannot connect to postgres\n%v\n", err)
+		os.Exit(1)
 	}
 
-	client = remote.Database("vorona")
+	client = remote
 
 	fmt.Println("Connected to database.")
 }

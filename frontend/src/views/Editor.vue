@@ -20,7 +20,10 @@
       
       <h3>Subtitle</h3>
       <input type="text" v-model="article.Subtitle" />
-      
+
+      <h3>Sidebar</h3>
+      <textarea id="sidebar-editor" v-model="article.Sidebar"></textarea>
+
       <h3>Body</h3>
       <textarea id="body-editor" v-model="article.Body"></textarea>
 
@@ -43,7 +46,7 @@ export default Vue.extend({
         ID: "",
         Title: "",
         Subtitle: "",
-        Sidebar: {},
+        Sidebar: "",
         Body: ""
       }
     };
@@ -63,7 +66,7 @@ export default Vue.extend({
         this.article.ID = "new"
         this.article.Title = ""
         this.article.Subtitle = ""
-        this.article.Sidebar = {}
+        this.article.Sidebar = ""
         this.article.Body = ""
 
         return
@@ -72,15 +75,43 @@ export default Vue.extend({
       axios.get(`${this.$store.getters.getURL}:8000/articles/${this.articleSelected}?format=markdown`)
       .then((res) => {
         this.article = res.data
+
+        if (res.data.Sidebar.length == 0) {
+          this.article.Sidebar = ""
+          return
+        }
+        
+        // eslint-disable-next-line prefer-const
+        let entries: string[] = []
+
+        Object.entries(res.data.Sidebar).forEach(elem => {
+          const [key, value] = elem
+          entries.push(`${key}:${value}`)
+        });
+
+        this.article.Sidebar = entries.join("\n")
       })
     },
 
     saveArticle() {
+      interface Sidebar {
+        [key: string]: string;
+      }
+      
+      // eslint-disable-next-line prefer-const
+      let sidebar: Sidebar = {}
+      const pairs = this.article.Sidebar.split("\n")
+
+      pairs.forEach(elem => {
+        const pair: string[] = elem.split(":")
+        sidebar[pair[0]] = pair[1]
+      });
+
       const url = `${this.$store.getters.getURL}:8000/articles/${this.article.ID}`
       const data = {
         Title: this.article.Title,
         Subtitle: this.article.Subtitle,
-        Sidebar: this.article.Sidebar,
+        Sidebar: sidebar,
         Body: this.article.Body
       }
 
@@ -139,7 +170,12 @@ input[type=text], button {
   padding: 0.5em;
 }
 
-textarea {
+#sidebar-editor {
+  max-width: 40em;
+  height: 24em;
+}
+
+#body-editor {
   max-width: 80em;
   height: 100%;
   min-height: 24em;

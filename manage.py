@@ -43,7 +43,7 @@ def reload(service=None):
     subprocess.run("docker-compose build {}".format(service), shell=True)
     subprocess.run("docker-compose up -d {}".format(service), shell=True)
     
-    if service == "frotnend" or service == "artist-dashboard":
+    if service == "frontend":
         check_vue()
 
 

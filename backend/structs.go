@@ -1,10 +1,8 @@
 package main
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
-
 // Article - Database Schema
 type Article struct {
-	ID       primitive.ObjectID `bson:"_id, omitempty"`
+	ID       int
 	Title    string
 	Subtitle string
 	Sidebar  map[string]string
@@ -13,6 +11,7 @@ type Article struct {
 
 // User - Database Schema
 type User struct {
+	ID       int
 	Email    string
 	Password string
 }

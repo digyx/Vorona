@@ -11,21 +11,24 @@ services:
       
   api:
     image: api
+    depends_on:
+      - postgres
     build: ./backend
     environment: 
-      - MONGO_URI=host.docker.internal
+      - POSTGRES_URI=postgres://postgres:$POSTGRES_PASSWORD@postgres:5432/vorona
       - DEV_ENV=true
     ports:
       - 8000:8080
 
-  mongo:
-    image: mongo
-    command: mongod --bind_ip 0.0.0.0
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
     volumes:
-      - "mongo:/data/db"
+      - "postgres:/var/lib/postgresql/data"
     ports:
-      - 27017:27017
+      - 5432:5432
 
 volumes:
-  mongo:
+  postgres:
     external: yes

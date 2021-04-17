@@ -7,8 +7,6 @@ import (
 
 	"github.com/gomarkdown/markdown"
 	"github.com/gorilla/mux"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func getArticleList(w http.ResponseWriter, r *http.Request) {
@@ -18,7 +16,7 @@ func getArticleList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cursor, err := client.Collection("articles").Find(ctx, bson.D{})
+	cursor, err := client.Query("SELECT * FROM Articles")
 
 	if err != nil {
 		fmt.Println(err)
@@ -27,9 +25,19 @@ func getArticleList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	articleList := []string{}
-	for cursor.Next(ctx) {
+
+	for cursor.Next() {
 		var article Article
-		cursor.Decode(&article)
+		err = cursor.Scan(&article.ID,
+			&article.Subtitle,
+			&article.Sidebar,
+			&article.Body,
+			&article.Title)
+
+		if err != nil {
+			fmt.Println(err)
+		}
+
 		articleList = append(articleList, article.Title)
 	}
 
@@ -47,12 +55,16 @@ func getArticle(w http.ResponseWriter, r *http.Request) {
 
 	var article Article
 
-	filter := bson.M{"title": title}
-	collection := client.Collection("articles")
-	collection.FindOne(ctx, filter).Decode(&article)
+	err := client.QueryRow("SELECT * from Articles WHERE Title=$1", title).Scan(
+		&article.ID,
+		&article.Subtitle,
+		&article.Sidebar,
+		&article.Body,
+		&article.Title)
 
-	if article.Title == "" {
+	if err != nil {
 		w.WriteHeader(404)
+		fmt.Println(err)
 		return
 	}
 
@@ -88,9 +100,13 @@ func updateArticle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	article.ID, _ = primitive.ObjectIDFromHex(articleID)
-	filter := bson.M{"_id": article.ID}
-	_, err := client.Collection("articles").ReplaceOne(ctx, filter, article)
+	sidebar, _ := json.Marshal(article.Sidebar)
+
+	_, err := client.Exec(
+		"UPDATE Articles "+
+			"SET Title=$2, Subtitle=$3, Sidebar=$4, Body=$5 "+
+			"WHERE ID=$1",
+		articleID, article.Title, article.Subtitle, sidebar, article.Body)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -102,22 +118,13 @@ func updateArticle(w http.ResponseWriter, r *http.Request) {
 }
 
 func createArticle(article Article) int {
-	var conflictArticle Article
-	filter := bson.M{"title": article.Title}
-	client.Collection("articles").FindOne(ctx, filter).Decode(&conflictArticle)
+	sidebar, _ := json.Marshal(article.Sidebar)
 
-	if conflictArticle.Title != "" {
-		return http.StatusConflict
-	}
-
-	articleInsert := Article{
-		Title:    article.Title,
-		Subtitle: article.Subtitle,
-		Sidebar:  article.Sidebar,
-		Body:     article.Body,
-	}
-
-	_, err := client.Collection("articles").InsertOne(ctx, articleInsert)
+	_, err := client.Exec(
+		"INSERT INTO "+
+			"Articles(Title, Subtitle, Sidebar, Body) "+
+			"VALUES ($1, $2, $3, $4)",
+		article.Title, article.Subtitle, sidebar, article.Body)
 
 	if err != nil {
 		fmt.Println(err)

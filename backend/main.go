@@ -12,12 +12,10 @@ import (
 	"context"
 
 	"github.com/gorilla/mux"
-	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/jackc/pgx"
 )
 
-var ctx context.Context
-var client *mongo.Database
-var err error
+var client *pgx.Conn
 
 func main() {
 	fmt.Println("Starting server...")

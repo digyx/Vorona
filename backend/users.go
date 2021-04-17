@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/gorilla/sessions"
-	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -23,12 +22,20 @@ func login(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&user)
 
 	var dbUser User
-	filter := bson.M{"email": user.Email}
-	client.Collection("users").FindOne(ctx, filter).Decode(&dbUser)
+	err := client.QueryRow("SELECT * FROM Users WHERE Email=$1", user.Email).Scan(
+		&dbUser.ID,
+		&dbUser.Email,
+		&dbUser.Password)
 
-	err := bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(user.Password))
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
 
-	if err != nil || user.Email == "" {
+	err = bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(user.Password))
+
+	if err != nil {
 		fmt.Println(err)
 		w.WriteHeader(http.StatusUnauthorized)
 		return
@@ -63,16 +70,6 @@ func createAccount(w http.ResponseWriter, r *http.Request) {
 	var user User
 	json.NewDecoder(r.Body).Decode(&user)
 
-	// Check if the email is taken
-	var checkUser User
-	filter := bson.M{"email": user.Email}
-	client.Collection("users").FindOne(ctx, filter).Decode(&checkUser)
-
-	if checkUser.Email != "" {
-		w.WriteHeader(http.StatusConflict)
-		return
-	}
-
 	// Generate Password Hash
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
 
@@ -84,9 +81,13 @@ func createAccount(w http.ResponseWriter, r *http.Request) {
 	user.Password = string(hash)
 
 	// Add user to Database
-	_, err = client.Collection("users").InsertOne(ctx, user)
+	_, err = client.Exec(
+		"INSERT INTO "+
+			"Users (Email, Password) "+
+			"VALUES ($1, $2)", user.Email, user.Password)
 
 	if err != nil {
+		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -120,7 +121,7 @@ func isLoggedIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if session.Values["authenticated"].(bool) == false {
+	if !session.Values["authenticated"].(bool) {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
