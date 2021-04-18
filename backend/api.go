@@ -17,7 +17,8 @@ func getArticleList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cursor, err := client.Query(context.Background(), "SELECT * FROM Articles")
+	cursor, err := client.Query(context.Background(),
+		"SELECT title FROM Articles")
 
 	if err != nil {
 		fmt.Println(err)
@@ -28,18 +29,14 @@ func getArticleList(w http.ResponseWriter, r *http.Request) {
 	articleList := []string{}
 
 	for cursor.Next() {
-		var article Article
-		err = cursor.Scan(&article.ID,
-			&article.Subtitle,
-			&article.Sidebar,
-			&article.Body,
-			&article.Title)
+		var article string
+		err = cursor.Scan(&article)
 
 		if err != nil {
 			fmt.Println(err)
 		}
 
-		articleList = append(articleList, article.Title)
+		articleList = append(articleList, article)
 	}
 
 	json.NewEncoder(w).Encode(articleList)
@@ -56,12 +53,15 @@ func getArticle(w http.ResponseWriter, r *http.Request) {
 
 	var article Article
 
-	err := client.QueryRow(context.Background(), "SELECT * from Articles WHERE Title=$1", title).Scan(
+	result := client.QueryRow(context.Background(),
+		"SELECT id, title, subtitle, sidebar, body from Articles WHERE Title=$1", title)
+
+	err := result.Scan(
 		&article.ID,
+		&article.Title,
 		&article.Subtitle,
 		&article.Sidebar,
-		&article.Body,
-		&article.Title)
+		&article.Body)
 
 	if err != nil {
 		w.WriteHeader(404)

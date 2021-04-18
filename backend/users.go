@@ -23,8 +23,11 @@ func login(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&user)
 
 	var dbUser User
-	err := client.QueryRow(context.Background(), "SELECT * FROM Users WHERE Email=$1", user.Email).Scan(
-		&dbUser.ID,
+
+	result := client.QueryRow(context.Background(),
+		"SELECT email, password FROM Users WHERE Email=$1", user.Email)
+
+	err := result.Scan(
 		&dbUser.Email,
 		&dbUser.Password)
 
