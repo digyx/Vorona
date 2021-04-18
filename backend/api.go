@@ -18,7 +18,7 @@ func getArticleList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cursor, err := client.Query(context.Background(),
-		"SELECT title FROM Articles")
+		"SELECT title FROM Articles ORDER BY title ASC")
 
 	if err != nil {
 		fmt.Println(err)
