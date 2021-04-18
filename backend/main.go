@@ -12,10 +12,10 @@ import (
 	"context"
 
 	"github.com/gorilla/mux"
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
-var client *pgx.Conn
+var client *pgxpool.Pool
 
 func main() {
 	fmt.Println("Starting server...")
