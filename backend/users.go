@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -22,7 +23,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&user)
 
 	var dbUser User
-	err := client.QueryRow("SELECT * FROM Users WHERE Email=$1", user.Email).Scan(
+	err := client.QueryRow(context.Background(), "SELECT * FROM Users WHERE Email=$1", user.Email).Scan(
 		&dbUser.ID,
 		&dbUser.Email,
 		&dbUser.Password)
@@ -81,7 +82,7 @@ func createAccount(w http.ResponseWriter, r *http.Request) {
 	user.Password = string(hash)
 
 	// Add user to Database
-	_, err = client.Exec(
+	_, err = client.Exec(context.Background(),
 		"INSERT INTO "+
 			"Users (Email, Password) "+
 			"VALUES ($1, $2)", user.Email, user.Password)

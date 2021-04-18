@@ -1,6 +1,0 @@
-Gender:Male
-Eyes:Brown
-Hair:Ginger
-Skin:White
-Height:6'0"
-Domain:Time

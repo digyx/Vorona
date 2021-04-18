@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -16,7 +17,7 @@ func getArticleList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cursor, err := client.Query("SELECT * FROM Articles")
+	cursor, err := client.Query(context.Background(), "SELECT * FROM Articles")
 
 	if err != nil {
 		fmt.Println(err)
@@ -55,7 +56,7 @@ func getArticle(w http.ResponseWriter, r *http.Request) {
 
 	var article Article
 
-	err := client.QueryRow("SELECT * from Articles WHERE Title=$1", title).Scan(
+	err := client.QueryRow(context.Background(), "SELECT * from Articles WHERE Title=$1", title).Scan(
 		&article.ID,
 		&article.Subtitle,
 		&article.Sidebar,
@@ -102,7 +103,7 @@ func updateArticle(w http.ResponseWriter, r *http.Request) {
 
 	sidebar, _ := json.Marshal(article.Sidebar)
 
-	_, err := client.Exec(
+	_, err := client.Exec(context.Background(),
 		"UPDATE Articles "+
 			"SET Title=$2, Subtitle=$3, Sidebar=$4, Body=$5 "+
 			"WHERE ID=$1",
@@ -120,7 +121,7 @@ func updateArticle(w http.ResponseWriter, r *http.Request) {
 func createArticle(article Article) int {
 	sidebar, _ := json.Marshal(article.Sidebar)
 
-	_, err := client.Exec(
+	_, err := client.Exec(context.Background(),
 		"INSERT INTO "+
 			"Articles(Title, Subtitle, Sidebar, Body) "+
 			"VALUES ($1, $2, $3, $4)",

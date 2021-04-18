@@ -1,5 +1,0 @@
-Domain:Magic
-Eyes:Blue
-Hair:Silver White
-Skin Tone:Pale White
-Height:4'10"

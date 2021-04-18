@@ -7,7 +7,7 @@ services:
       - postgres
     build: ./backend
     environment: 
-      - POSTGRES_URI=postgres://postgres:default@postgres:5432/vorona
+      - POSTGRES_URI=postgres://postgres:$POSTGRES_PASSWORD@postgres:5432/vorona
     volumes:
       - "/etc/letsencrypt:/etc/letsencrypt"
     ports:

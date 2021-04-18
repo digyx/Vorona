@@ -1,17 +1,17 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v4"
 )
 
 func connectToDatabase() {
 	fmt.Println("Connecting to database...")
 	// Connect to Postgres Database
-	config, _ := pgx.ParseConnectionString(os.Getenv("POSTGRES_URI"))
-	remote, err := pgx.Connect(config)
+	remote, err := pgx.Connect(context.Background(), os.Getenv("POSTGRES_URI"))
 
 	if err != nil {
 		fmt.Printf("error: cannot connect to postgres\n%v\n", err)

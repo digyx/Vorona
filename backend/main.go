@@ -12,7 +12,7 @@ import (
 	"context"
 
 	"github.com/gorilla/mux"
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v4"
 )
 
 var client *pgx.Conn

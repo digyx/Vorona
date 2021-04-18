@@ -1,4 +1,4 @@
-FROM golang:1.13.3-stretch
+FROM golang:1.16.3-stretch
 
 LABEL maintainer="Devon Tingley <dtingley@twilit.io>"
 

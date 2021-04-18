@@ -1,6 +1,0 @@
-Gender:Male
-Eyes:Red
-Hair:White
-Skin:Pale
-Height:6'3"
-Domain:Spatial Dimension

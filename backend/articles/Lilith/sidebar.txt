@@ -1,6 +1,0 @@
-Gender:Female
-Eyes:Emerald Green
-Hair:Black
-Skin:Pale
-Height:5'11"
-Domain:Desire
