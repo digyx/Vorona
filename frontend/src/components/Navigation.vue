@@ -68,11 +68,10 @@ export default Vue.extend({
 
   watch: {
     searchTerm: function() {
-      console.log(this.searchTerm)
       this.articlesShown = []
 
       this.articles.forEach(title => {
-        if (title.toLowerCase().includes(this.searchTerm) && this.articlesShown.length < 20) {
+        if (title.toLowerCase().includes(this.searchTerm.toLowerCase()) && this.articlesShown.length < 20) {
           this.articlesShown.push(title)
         }
       });
