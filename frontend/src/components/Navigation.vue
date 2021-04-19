@@ -9,7 +9,10 @@
         <h2 @click="home()" style="cursor: pointer">
           Gnezdo Vorona
         </h2>
-        <div v-for="article in this.articles" :key="article.id">
+
+        <input id="search-bar" type="text" v-model="searchTerm">
+
+        <div v-for="article in this.articlesShown" :key="article.id">
           <!-- Change this to be custom code for both style and the ability to reload the page at the same time -->
           <router-link :to="{ name: 'articles', params: { title: article }}" class="nav-item">
             {{ article }}
@@ -36,8 +39,12 @@ export default Vue.extend({
   name: 'SiteIndex',
   
   data: function() {
+    const blankStringArray: string[] = []
+
     return {
-      articles: ["Mephisto", "Leviathan"],
+      articles: blankStringArray,
+      articlesShown: blankStringArray,
+      searchTerm: "",
       mobile: false,
       showNav: true,
     }
@@ -45,12 +52,31 @@ export default Vue.extend({
 
   created() {
     axios.get(`${this.$store.getters.getURL}:8000/articles`)
-    .then((res) => this.articles = res.data)
+    .then((res) => {
+      this.articles = res.data
+
+      for (let i = 0; i < this.articles.length && i < 20; i++) {
+        this.articlesShown.push(this.articles[i])
+      }
+    })
     .catch((err) => alert(err))
 
     window.addEventListener("resize", this.checkResize)
     window.addEventListener("locationchange", this.checkResize)
     this.checkResize()
+  },
+
+  watch: {
+    searchTerm: function() {
+      console.log(this.searchTerm)
+      this.articlesShown = []
+
+      this.articles.forEach(title => {
+        if (title.toLowerCase().includes(this.searchTerm) && this.articlesShown.length < 20) {
+          this.articlesShown.push(title)
+        }
+      });
+    }
   },
 
   methods: {
@@ -85,6 +111,11 @@ export default Vue.extend({
   height: 100%;
   padding: 2em;
   text-align: left;
+}
+
+#search-bar {
+  margin: 1em;
+  padding: 1em;
 }
 
 .nav-item {
